@@ -1,8 +1,13 @@
 import express from "express"
 import notes from "./notes.js";
 import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+
+// import cors from 'cors'
 const app = express();
 dotenv.config();
+connectDB(); 
+// app.use(cors());
 app.get('/', (req, res) => {
     res.send('API is Running');
 })
