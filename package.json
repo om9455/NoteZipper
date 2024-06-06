@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "NoteZipper is a full-stack MERN (MongoDB, Express.js, React, Node.js) application designed for efficient note management. Users can create, edit, delete, and organize their notes seamlessly, ensuring all important information is securely stored and easily accessible.",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "nodemon backend/server.js",
     "client": "npm start --prefix frontend",
@@ -13,10 +12,13 @@
   "author": "Om J. Megha",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.1",
     "nodemon": "^3.1.3"
   }
