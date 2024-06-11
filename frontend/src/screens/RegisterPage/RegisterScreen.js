@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainScreen from "../../components/MainScreen";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link,useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../../actions/userActions";
+
 const RegisterScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,8 +15,17 @@ const RegisterScreen = () => {
   const [pic, setPic] = useState("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg");
   const [message, setMessage] = useState(null);
   const [picMessage, setPicMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+    const history = useNavigate();
+  const dispatch = useDispatch();
+  const userRegister = useSelector((state) => state.userRegister);
+  const { loading, error, userInfo } = userRegister;
+
+
+  useEffect(() => {
+    if (userInfo) {
+      history("/mynotes");
+    }
+  }, [history, userInfo]);
 
   const postDetails = (pics) => {
     if (!pics) {
@@ -46,35 +57,11 @@ const RegisterScreen = () => {
     if (password !== confirmPassword) {
       setMessage("Password Do not Match")
     } else {
-      setMessage(null);
-      try {
-        const config = {
-          headers: {
-            "Content-type": "application/json",
-          },
-        };
-        setLoading(true);
-        const { data } = await axios.post(
-          "/api/users",
-          {
-            name,
-            email,
-            password,
-            pic,
-          },
-          config
-        );
-        console.log(data);
-        localStorage.setItem("userInfo", JSON.stringify(data));
-        setLoading(false);
-        setError(false);
-      } catch (error) {
-        setError(error.response.data.message);
-        console.log(error.response.data.message);
-        setLoading(false);
-      }
+      dispatch(register(name, email, password, pic));
+      history("/mynotes");
     }
   };
+
   return (
     <Container className="mx-auto" style={{ width: "80%" }}>
       <MainScreen title="REGISTER">
